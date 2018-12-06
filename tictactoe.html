@@ -1,0 +1,166 @@
+<html>
+<head>
+<style>
+#tictactoe { width:240px; }
+#tictactoe h1,#tictactoe td{text-align:center; vertical-align: middle;}
+#tictactoe{font-family:sans-serif}
+#tictactoe a{color:#000;text-decoration:none}
+#tictactoe table{margin:0 auto;border-collapse:collapse}
+#tictactoe td{width:50px;height:50px;font-size:150%;border:1px solid #000}
+#tictactoe .player1{color:#c71585}
+#tictactoe .player2{color:#4682b4}
+#tictactoe .message, #tictactoe .message1{background-color:teal;height:50px;color:#fff;display:none}
+#tictactoe .restart{width:240px;text-align:center;margin:0 auto}
+</style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script>
+let TicTacToe = {
+
+    counter: 1,
+
+    init: function(e,obj){
+        let self = this;
+
+        self.setPlay(e,obj);
+        self.validateTicTacToe();
+
+    },
+    setPlay: function(e,obj){
+        let self = this,
+            player1 = 'X', player2 = 'Y',
+            cell = obj || {};
+
+        if ( $(obj).hasClass('player1') ||  $(obj).hasClass('player2') ) {
+            e.preventDefault();
+            return false;
+        }
+
+        if ( TicTacToe.counter % 2 === 0) {
+            $(cell).html(player1).addClass('player1 selected');
+        } else {
+            $(cell).html(player2).addClass('player2 selected');
+        }
+
+        if($('td').length - 2 == $('td.selected').length) {
+
+            if( $('.message').is(':hidden') ) {
+                $('.message1').fadeIn('slow');
+                return false;
+            }
+
+        }
+
+        TicTacToe.counter++;
+    },
+    validateTicTacToe: function(){
+        let index0 = $('td#zero'),
+            index1 = $('td#one'),
+            index2 = $('td#two'),
+            index3 = $('td#three'),
+            index4 = $('td#four'),
+            index5 = $('td#five'),
+            index6 = $('td#six'),
+            index7 = $('td#seven'),
+            index8 = $('td#eight');
+
+             if (   $(index0).text() === 'X'
+                &&  $(index1).text() === 'X'
+                &&  $(index2).text() === 'X' ||
+                    $(index3).text() === 'X'
+                &&  $(index4).text() === 'X'
+                &&  $(index5).text() === 'X' ||
+                    $(index6).text() === 'X'
+                &&  $(index7).text() === 'X'
+                &&  $(index8).text() === 'X' ||
+                    $(index0).text() === 'X'
+                &&  $(index3).text() === 'X'
+                &&  $(index6).text() === 'X' ||
+                    $(index1).text() === 'X'
+                &&  $(index4).text() === 'X'
+                &&  $(index7).text() === 'X' ||
+                    $(index2).text() === 'X'
+                &&  $(index5).text() === 'X'
+                &&  $(index8).text() === 'X' ||
+                    $(index0).text() === 'X'
+                &&  $(index4).text() === 'X'
+                &&  $(index8).text() === 'X' ||
+                    $(index2).text() === 'X'
+                &&  $(index4).text() === 'X'
+                &&  $(index6).text() === 'X' ||
+                    $(index0).text() === 'Y'
+                &&  $(index1).text() === 'Y'
+                &&  $(index2).text() === 'Y' ||
+                    $(index3).text() === 'Y'
+                &&  $(index4).text() === 'Y'
+                &&  $(index5).text() === 'Y' ||
+                    $(index6).text() === 'Y'
+                &&  $(index7).text() === 'Y'
+                &&  $(index8).text() === 'Y' ||
+                    $(index0).text() === 'Y'
+                &&  $(index3).text() === 'Y'
+                &&  $(index6).text() === 'Y' ||
+                    $(index1).text() === 'Y'
+                &&  $(index4).text() === 'Y'
+                &&  $(index7).text() === 'Y' ||
+                    $(index2).text() === 'Y'
+                &&  $(index5).text() === 'Y'
+                &&  $(index8).text() === 'Y' ||
+                    $(index0).text() === 'Y'
+                &&  $(index4).text() === 'Y'
+                &&  $(index8).text() === 'Y' ||
+                    $(index2).text() === 'Y'
+                &&  $(index4).text() === 'Y'
+                &&  $(index6).text() === 'Y') {
+                    $('.message').fadeIn('slow');
+                    $('.message1').hide();
+                    $('table').off('click');
+            }
+        }
+
+};
+
+$(function(){
+    $('table').on('click','td', function(e){
+
+        let obj = $(this);
+        TicTacToe.init(e,obj);
+    });
+
+    $('p.restart').on('click', function (e){
+        e.preventDefault();
+        $('table').find('td.selected').text('');
+        $('table').find('td')
+            .removeClass('selected')
+            .removeClass('player1')
+            .removeClass('player2');
+        $('.message').fadeOut('slow');
+        $('.message1').fadeOut('slow');
+        $('table').on('click','td', function(e){
+            let obj = $(this);
+            TicTacToe.init(e,obj);
+        });
+    });
+
+});
+</script>
+</head>
+
+<body>
+  <main id="tictactoe">
+     <header>
+       <h1>Tic Tac Toe</h1>
+       <p class="restart"><a href="/">Restart Game</a></p>
+     </header>
+     <section>
+       <table>
+         <tr><td id="zero"> </td> <td id="one"> </td> <td id="two"></td>></tr>
+         <tr><td id="three"> </td> <td id="four"> </td> <td id="five"></td></tr>
+         <tr><td id="six"> </td> <td id="seven"> </td> <td id="eight"></td></tr>
+         <tr><td class="message" colspan="3">You're the Winner</td></tr>
+<tr><td class="message1" colspan="3">There's a tie</td></tr>
+       </table>
+     </section>
+   </main>
+</body>
+</html>
